@@ -5,7 +5,7 @@ import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
-import { axiosInstance } from "./lib/axios";
+// import { axiosInstance } from "./lib/axios";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
@@ -39,11 +39,11 @@ const App = () => {
         <Route path="/signup" element={<SignUpPage />} />
         <Route
           path="/login"
-          element={authUser ? <LoginPage /> : <Navigate to="/" />}
+          element={<LoginPage />}
         />
         <Route
           path="/settings"
-          element={authUser ? <SettingsPage /> : <Navigate to="/login" />}
+          element={<SettingsPage />}
         />
         <Route
           path="/profile"
