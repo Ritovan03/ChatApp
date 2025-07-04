@@ -33,7 +33,7 @@ export const useChatStore = create((set) => ({
     }
   },
   sendMessage: async (messageData) => {
-    const { selectedUser, messages } = get();
+    const { selectedUser, messages } = useChatStore.get();
     try {
       const res = await axiosInstance.post(
         `/messages/send/${selectedUser._id}`,
@@ -46,7 +46,7 @@ export const useChatStore = create((set) => ({
   },
 
   subscribeToMessages: () => {
-    const { selectedUser } = get();
+    const { selectedUser } = useChatStore.get();
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
@@ -57,7 +57,7 @@ export const useChatStore = create((set) => ({
       if (!isMessageSentFromSelectedUser) return;
 
       set({
-        messages: [...get().messages, newMessage],
+        messages: [...useChatStore.get().messages, newMessage],
       });
     });
   },
