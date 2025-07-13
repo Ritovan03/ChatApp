@@ -1,11 +1,10 @@
-import { Route, Routes,Navigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
-// import { axiosInstance } from "./lib/axios";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
@@ -14,10 +13,16 @@ import { useThemeStore } from "./store/useThemeStore";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
-  const {theme} = useThemeStore
+  const { theme } = useThemeStore();
+  
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  // Initialize theme on mount
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   console.log("Auth User:", authUser);
 
@@ -29,22 +34,25 @@ const App = () => {
     );
 
   return (
-    <div data-theme = {theme}>
+    <>
       <Navbar />
 
       <Routes>
         <Route
           path="/"
-          element={ <HomePage />}
+          element={authUser ? <HomePage /> : <Navigate to="/login" />}
         />
-        <Route path="/signup" element={<SignUpPage />} />
+        <Route
+          path="/signup"
+          element={!authUser ? <SignUpPage /> : <Navigate to="/login" />}
+        />
         <Route
           path="/login"
-          element={<LoginPage />}
+          element={!authUser ? <LoginPage /> : <Navigate to="/" />}
         />
         <Route
           path="/settings"
-          element={<SettingsPage />}
+          element={authUser ? <SettingsPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/profile"
@@ -53,7 +61,7 @@ const App = () => {
       </Routes>
 
       <Toaster />
-    </div>
+    </>
   );
 };
 export default App;
